@@ -77,10 +77,9 @@ struct Line {
 impl Line {
     fn split(line: &str) -> Line {
         let idx = line.find(' ').unwrap();
-        let fuck = String::from(line);
         Line {
             // @question 如何从字符串取切片并转换为 String
-            title: fuck[idx + 1..].to_string(),
+            title: String::from(line)[idx + 1..].to_string(),
             level: idx as u8,
         }
     }
