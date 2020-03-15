@@ -25,12 +25,12 @@ fn main() {
         if line.starts_with("```") {
             in_code = !in_code;
         }
-        if !in_code && line.starts_with("#") {
+        if !in_code && line.starts_with("#") && line.contains(" ") {
             let item: Line = Line::split(line);
             let title = item.title.clone();
             let level = item.level;
             let item_type = 0x60 + item.level;
-            if stack.is_empty() {
+            if stack.len() == 0 {
                 stack.insert(0, item);
             } else if stack[0].level < item.level {
                 stack.insert(0, item);
