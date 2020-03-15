@@ -59,14 +59,13 @@ fn main() {
                 let parent = &stack[1];
                 plevel = parent.level;
             }
-            let scope = "";
+            let scope: String;
             if !scopes_str.is_empty() {
-                #[allow(unused_variables)]
-                let scope = format!("h{}:{}", plevel, scopes_str);
+                scope = format!("h{}:{}", plevel, scopes_str);
             }
             println!(
                 "{}\t{}\t/^{}$/;\"\t{}\tline:{}\t{}",
-                title, path, line, item_type as char, line_no, scope
+                title, path, line, item_type as char, line_no, scope.as_str()
             );
         }
     }
