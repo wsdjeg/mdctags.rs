@@ -21,6 +21,7 @@ fn main() {
             in_code = !in_code;
         }
         if !in_code && line.starts_with("#") {
+            let title: String = line.split_whitespace().collect()[1];
             println!("{}", line);
         }
     }
