@@ -13,7 +13,10 @@ fn main() {
     if args.len() == 0 {
         process::exit(0);
     }
-    let contents = fs::read_to_string("README.md").expect("");
+    // 转换 path 至绝对路径
+    let path = "README.md";
+
+    let contents = fs::read_to_string(path).expect("");
     let mut stack: Vec<Line> = Vec::new();
     let mut in_code = false;
     let mut line_no = 0;
@@ -24,14 +27,42 @@ fn main() {
         }
         if !in_code && line.starts_with("#") {
             let item: Line = Line::split(line);
-            println!("{}", item.level);
+            let title = item.title.clone();
+            let item_type = 0x60 + item.level;
+            if stack.len() == 0 {
+                stack.insert(0, item);
+            }else if stack[0].level < item.level {
+                stack.insert(0, item);
+            }else {
+
+            }
+            // } else {
+                // while (count($stack) && $stack[0]['level'] >= $line['level']) {
+                    // array_shift($stack);
+                // }
+                // array_unshift($stack, $line);
+            // }
+            //$scopes = array_map(function ($line) { return $line['title']; }, array_reverse($stack));
+            // array_pop($scopes);
+            // $scopesStr = implode('::', $scopes);
+            // $level = $line['level'];
+            // if (count($stack) < 2) {
+                // $plevel = $level > 1 ? $level - 1 : 0;
+            // } else {
+                // $parent = $stack[1];
+                // $plevel = $parent['level'];
+            // }
+            // $scope = $scopesStr ? "h$plevel:$scopesStr" : '';
+            // $type = chr(0x60 + $level);
+            // echo "$title\t$path\t/^$anchor\$/;\"\t$type\tline:$lineNo\t$scope\n";
+            println!("{}\t{}\t/^{}$/;\"\t{}", title, path, line, item_type as char);
         }
     }
 }
 
 struct Line {
     title: String,
-    level: i32,
+    level: u8,
 }
 
 impl Line {
@@ -40,8 +71,8 @@ impl Line {
         let fuck = String::from(line);
         Line {
             // @question 如何从字符串取切片并转换为 String
-            title: fuck[idx..].to_string(),
-            level: idx as i32,
+            title: fuck[idx+1..].to_string(),
+            level: idx as u8,
         }
     }
 }
