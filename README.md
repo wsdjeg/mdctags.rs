@@ -1,7 +1,7 @@
 ## mdctags
 > tags for markdown file
 
-![Rust](https://github.com/wsdjeg/mdctags.rs/workflows/Rust/badge.svg)
+[![Rust](https://github.com/wsdjeg/mdctags.rs/workflows/Rust/badge.svg)]()
 
 
 ### Config mdctags for tagbar
