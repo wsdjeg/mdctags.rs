@@ -28,41 +28,43 @@ fn main() {
         if !in_code && line.starts_with("#") {
             let item: Line = Line::split(line);
             let title = item.title.clone();
+            let level = item.level;
             let item_type = 0x60 + item.level;
             if stack.len() == 0 {
                 stack.insert(0, item);
-            }else if stack[0].level < item.level {
+            } else if stack[0].level < item.level {
                 stack.insert(0, item);
-            }else {
-
+            } else {
+                while stack.len() > 0 && stack[0].level >= item.level {
+                    stack.remove(0);
+                }
+                stack.insert(0, item);
             }
-            // } else {
-                // while (count($stack) && $stack[0]['level'] >= $line['level']) {
-                    // array_shift($stack);
-                // }
-                // array_unshift($stack, $line);
-            // }
             //$scopes = array_map(function ($line) { return $line['title']; }, array_reverse($stack));
-            // array_pop($scopes);
-            // $scopesStr = implode('::', $scopes);
-            // $level = $line['level'];
-            // if (count($stack) < 2) {
+            let mut scopes: Vec<String> = Vec::new();
+            for each in stack {
+                scopes.insert(0, each.title.clone());
+            }
+            let scopesStr: String = scopes.join("::");
+            let plevel = 0;
             if stack.len() < 2 {
-                if item.level > 1 {
-                    let plevel = item.level -1;
-                }else {
+                if level > 1 {
+                    let plevel = level - 1;
+                } else {
                     let plevel = 0;
                 }
+            } else {
+                let parent = &stack[1];
+                let plevel = parent.level;
             }
-                // $plevel = $level > 1 ? $level - 1 : 0;
-            // } else {
-                // $parent = $stack[1];
-                // $plevel = $parent['level'];
-            // }
-            // $scope = $scopesStr ? "h$plevel:$scopesStr" : '';
-            // $type = chr(0x60 + $level);
-            // echo "$title\t$path\t/^$anchor\$/;\"\t$type\tline:$lineNo\t$scope\n";
-            println!("{}\t{}\t/^{}$/;\"\t{}\tline:{}", title, path, line, item_type as char, line_no);
+            let scope = "";
+            if !scopesStr.is_empty() {
+                let scope = format!("h{}:{}", plevel, scopesStr);
+            }
+            println!(
+                "{}\t{}\t/^{}$/;\"\t{}\tline:{}\t{}",
+                title, path, line, item_type as char, line_no, scope
+            );
         }
     }
 }
@@ -78,7 +80,7 @@ impl Line {
         let fuck = String::from(line);
         Line {
             // @question 如何从字符串取切片并转换为 String
-            title: fuck[idx+1..].to_string(),
+            title: fuck[idx + 1..].to_string(),
             level: idx as u8,
         }
     }
