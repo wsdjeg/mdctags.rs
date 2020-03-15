@@ -41,25 +41,28 @@ fn main() {
                 stack.insert(0, item);
             }
             //$scopes = array_map(function ($line) { return $line['title']; }, array_reverse($stack));
+            #[allow(unused_mut)]
             let mut scopes: Vec<String> = Vec::new();
-            for each in stack {
-                scopes.insert(0, each.title.clone());
-            }
-            let scopesStr = scopes.join("::");
-            let plevel = 0;
+            // for each in stack {
+                // scopes.insert(0, each.title.clone());
+            // }
+            let scopes_str = scopes.join("::");
+            #[allow(unused_assignments)]
+            let mut plevel = 0;
             if stack.len() < 2 {
                 if level > 1 {
-                    let plevel = level - 1;
+                    plevel = level - 1;
                 } else {
-                    let plevel = 0;
+                    plevel = 0;
                 }
             } else {
                 let parent = &stack[1];
-                let plevel = parent.level;
+                plevel = parent.level;
             }
             let scope = "";
-            if !scopesStr.is_empty() {
-                let scope = format!("h{}:{}", plevel, scopesStr);
+            if !scopes_str.is_empty() {
+                #[allow(unused_variables)]
+                let scope = format!("h{}:{}", plevel, scopes_str);
             }
             println!(
                 "{}\t{}\t/^{}$/;\"\t{}\tline:{}\t{}",
