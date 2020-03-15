@@ -1,9 +1,6 @@
 ## mdctags
 > tags for markdown file
 
-[![Rust](https://github.com/wsdjeg/mdctags.rs/workflows/Rust/badge.svg)]()
-
-
 ### Config mdctags for tagbar
 
 ```viml
@@ -37,3 +34,8 @@ let g:tagbar_type_markdown = {
             \}
             \}
 ```
+
+
+### Thanks
+
+- [tagbar-markdown](https://github.com/lvht/tagbar-markdown)
