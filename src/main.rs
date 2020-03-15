@@ -86,3 +86,13 @@ impl Line {
         }
     }
 }
+
+fn is_head(line: &str) -> bool {
+    if line.starts_with("# ") {
+        true
+    }else if line.starts_with("## ") {
+        true
+    }else{
+        false
+    }
+}
