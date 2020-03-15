@@ -30,7 +30,7 @@ fn main() {
             let title = item.title.clone();
             let level = item.level;
             let item_type = 0x60 + item.level;
-            if stack.len() == 0 {
+            if stack.is_empty() {
                 stack.insert(0, item);
             } else if stack[0].level < item.level {
                 stack.insert(0, item);
