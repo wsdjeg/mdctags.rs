@@ -2,7 +2,6 @@ use std::fs;
 use std::process;
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    println!("{:?}", "### intro".find(' ').expect(""));
     // process::exit(0);
     println!("!_TAG_FILE_FORMAT       2       /extended format; --format=1 will not append ;\" to lines/'
 !_TAG_FILE_SORTED       0       /0=unsorted, 1=sorted, 2=foldcase/'
@@ -25,7 +24,7 @@ fn main() {
         }
         if !in_code && line.starts_with("#") {
             let item: Line = Line::split(line);
-            println!("{}", line);
+            println!("{}", item.level);
         }
     }
 }
@@ -38,9 +37,10 @@ struct Line {
 impl Line {
     fn split(line: &str) -> Line {
         let idx = line.find(' ').unwrap();
+        let fuck = String::from(line);
         Line {
             // @question 如何从字符串取切片并转换为 String
-            title: line.chars().collect(),
+            title: fuck[idx..].to_string(),
             level: idx as i32,
         }
     }
