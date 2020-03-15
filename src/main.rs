@@ -47,6 +47,13 @@ fn main() {
             // $scopesStr = implode('::', $scopes);
             // $level = $line['level'];
             // if (count($stack) < 2) {
+            if stack.len() < 2 {
+                if item.level > 1 {
+                    let plevel = item.level -1;
+                }else {
+                    let plevel = 0;
+                }
+            }
                 // $plevel = $level > 1 ? $level - 1 : 0;
             // } else {
                 // $parent = $stack[1];
@@ -55,7 +62,7 @@ fn main() {
             // $scope = $scopesStr ? "h$plevel:$scopesStr" : '';
             // $type = chr(0x60 + $level);
             // echo "$title\t$path\t/^$anchor\$/;\"\t$type\tline:$lineNo\t$scope\n";
-            println!("{}\t{}\t/^{}$/;\"\t{}", title, path, line, item_type as char);
+            println!("{}\t{}\t/^{}$/;\"\t{}\tline:{}", title, path, line, item_type as char, line_no);
         }
     }
 }
