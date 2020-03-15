@@ -45,7 +45,7 @@ fn main() {
             for each in stack {
                 scopes.insert(0, each.title.clone());
             }
-            let scopesStr: String = scopes.join("::");
+            let scopesStr = scopes.join("::");
             let plevel = 0;
             if stack.len() < 2 {
                 if level > 1 {
