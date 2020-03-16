@@ -40,12 +40,11 @@ fn main() {
                 }
                 stack.insert(0, item);
             }
-            //$scopes = array_map(function ($line) { return $line['title']; }, array_reverse($stack));
             #[allow(unused_mut)]
             let mut scopes: Vec<String> = Vec::new();
-            // for each in stack {
-                // scopes.insert(0, each.title.clone());
-            // }
+            for each in stack.clone() {
+                scopes.insert(0, each.title.clone());
+            }
             let scopes_str = scopes.join("::");
             #[allow(unused_assignments)]
             let mut plevel = 0;
@@ -71,6 +70,7 @@ fn main() {
     }
 }
 
+#[derive(Clone)]
 struct Line {
     title: String,
     level: u8,
@@ -87,6 +87,7 @@ impl Line {
     }
 }
 
+#[allow(dead_code)]
 fn is_head(line: &str) -> bool {
     if line.starts_with("# ") {
         true
