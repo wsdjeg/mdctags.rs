@@ -59,7 +59,7 @@ fn main() {
                 let parent = &stack[1];
                 plevel = parent.level;
             }
-            let scope: String;
+            let mut scope: String = String::new();
             if !scopes_str.is_empty() {
                 scope = format!("h{}:{}", plevel, scopes_str);
             }
