@@ -3,7 +3,7 @@ use std::process;
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     // process::exit(0);
-    println!("!_TAG_FILE_FORMAT       2       /extended format; --format=1 will not append ;\" to lines/'
+    print!("!_TAG_FILE_FORMAT       2       /extended format; --format=1 will not append ;\" to lines/'
 !_TAG_FILE_SORTED       0       /0=unsorted, 1=sorted, 2=foldcase/'
 !_TAG_PROGRAM_AUTHOR    wsdjeg /wsdkeg@outlook.com/'
 !_TAG_PROGRAM_NAME      mdctags        //'
@@ -45,6 +45,7 @@ fn main() {
             for each in stack.clone() {
                 scopes.insert(0, each.title.clone());
             }
+            scopes.pop();
             let scopes_str = scopes.join("::");
             #[allow(unused_assignments)]
             let mut plevel = 0;
