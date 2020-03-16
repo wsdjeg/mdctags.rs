@@ -1,8 +1,9 @@
 use std::fs;
-use std::process;
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    // process::exit(0);
+    if args.len() < 2 {
+        panic!("Not enough arguments");
+    }
     print!("!_TAG_FILE_FORMAT       2       /extended format; --format=1 will not append ;\" to lines/'
 !_TAG_FILE_SORTED       0       /0=unsorted, 1=sorted, 2=foldcase/'
 !_TAG_PROGRAM_AUTHOR    wsdjeg /wsdkeg@outlook.com/'
@@ -10,9 +11,6 @@ fn main() {
 !_TAG_PROGRAM_URL       https://github.com/wsdjeg/mdctags /official site/'
 !_TAG_PROGRAM_VERSION   0.1.0   //'
 ");
-    if args.len() == 0 {
-        process::exit(0);
-    }
     // 转换 path 至绝对路径
     let path = &args[1];
 
