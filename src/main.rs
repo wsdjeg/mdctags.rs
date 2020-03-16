@@ -14,7 +14,7 @@ fn main() {
         process::exit(0);
     }
     // 转换 path 至绝对路径
-    let path = "README.md";
+    let path = &args[1];
 
     let contents = fs::read_to_string(path).expect("");
     let mut stack: Vec<Line> = Vec::new();
