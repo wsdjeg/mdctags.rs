@@ -63,7 +63,7 @@ fn main() {
             }
             println!(
                 "{}\t{}\t/^{}$/;\"\t{}\tline:{}\t{}",
-                title, path, line, item_type as char, line_no, scope.as_str()
+                title, canonicalize(path), line, item_type as char, line_no, scope.as_str()
             );
         }
     }
@@ -95,4 +95,17 @@ fn is_head(line: &str) -> bool {
     }else{
         false
     }
+}
+#[cfg(not(windows))]
+fn canonicalize(path: &String) -> String {
+    fs::canonicalize(path).unwrap().to_str().unwrap()
+}
+
+#[cfg(windows)]
+fn canonicalize(path: &String) -> String {
+    // Real fs::canonicalize on Windows produces UNC paths which cl.exe is
+    // unable to handle in includes. Use a poor approximation instead.
+    // https://github.com/rust-lang/rust/issues/42869
+    // https://github.com/alexcrichton/cc-rs/issues/169
+    fs::canonicalize(path).unwrap().to_str().unwrap()[4..].to_string()
 }
