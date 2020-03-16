@@ -63,7 +63,12 @@ fn main() {
             }
             println!(
                 "{}\t{}\t/^{}$/;\"\t{}\tline:{}\t{}",
-                title, canonicalize(path), line, item_type as char, line_no, scope.as_str()
+                title,
+                canonicalize(path),
+                line,
+                item_type as char,
+                line_no,
+                scope.as_str()
             );
         }
     }
@@ -90,9 +95,9 @@ impl Line {
 fn is_head(line: &str) -> bool {
     if line.starts_with("# ") {
         true
-    }else if line.starts_with("## ") {
+    } else if line.starts_with("## ") {
         true
-    }else{
+    } else {
         false
     }
 }
