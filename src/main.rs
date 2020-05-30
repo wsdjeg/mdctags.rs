@@ -103,7 +103,7 @@ fn is_head(line: &str) -> bool {
 }
 #[cfg(not(windows))]
 fn canonicalize(path: &String) -> String {
-    fs::canonicalize(path).unwrap().to_str().unwrap()
+    fs::canonicalize(path).unwrap().to_str().unwrap().to_string()
 }
 
 #[cfg(windows)]
