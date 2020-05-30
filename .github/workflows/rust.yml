@@ -1,0 +1,40 @@
+name: Rust
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: cargo build --verbose
+    - name: Run tests
+      run: cargo test --verbose
+    - name: Setup bats
+      run: |
+        git clone https://github.com/bats-core/bats-core.git
+        cd bats-core
+        sudo ./install.sh /usr/local
+    - name: Run bats tests
+      run: bats ./test
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build x86_64-pc-windows-gnu
+      run: |
+        rustup show
+        cargo install cross
+        cross build --verbose --release --target x86_64-pc-windows-gnu
+    - uses: actions/upload-artifact@v1
+      with:
+         name: mdctags-stable-x86_64-pc-windows-gnu
+         path: target/x86_64-pc-windows-gnu/release/mdctags.exe
