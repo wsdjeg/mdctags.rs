@@ -40,6 +40,25 @@ let g:tagbar_type_markdown = {
             \}
 ```
 
+### Installation
+
+```sh
+git clone https://github.com/wsdjeg/mdctags.rs.git
+cd ./mdctags.rs
+cargo build --release
+cp ./target/release/mdctags /path/to/your/bin
+```
+
+If you have cross, you can cross-compile.
+
+```sh
+git clone https://github.com/wsdjeg/mdctags.rs.git
+cd ./mdctags.rs
+cargo install cross
+cross build --release --target x86_64-pc-windows-gnu
+  # --> target/x86_64-pc-windows-gnu/release/mdctags.exe
+```
+
 ### Thanks
 
 - [tagbar-markdown](https://github.com/lvht/tagbar-markdown)
