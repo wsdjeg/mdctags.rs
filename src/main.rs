@@ -55,13 +55,13 @@ fn main() {
             while stack.len() > 0 && stack[0].level >= item.level {
                 stack.remove(0);
             }
-            #[allow(unused_mut)]
-            let mut scopes: Vec<String> = Vec::new();
-            for each in stack.clone() {
-                scopes.insert(0, each.title.clone());
-            }
-            let scopes_str = scopes.join("::");
-            #[allow(unused_assignments)]
+            let scopes_str = stack
+                .clone()
+                .into_iter()
+                .map(|x| x.title.clone())
+                .rev()
+                .collect::<Vec<String>>()
+                .join("::");
             let mut plevel = 0;
             if stack.len() < 1 {
                 if level > 1 {
