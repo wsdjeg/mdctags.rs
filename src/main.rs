@@ -106,11 +106,10 @@ struct Line {
 
 impl Line {
     fn split(line: &str) -> Line {
-        let idx = line.find(' ').unwrap();
+        let v: Vec<&str> = line.splitn(2, ' ').collect();
         Line {
-            // @question 如何从字符串取切片并转换为 String
-            title: String::from(line)[idx + 1..].to_string(),
-            level: idx as u8,
+            title: v[1].to_string(),
+            level: v[0].len() as u8,
         }
     }
 }
