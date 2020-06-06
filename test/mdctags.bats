@@ -114,7 +114,6 @@ __EXPECT__
 }
 
 @test "Code blocks with tildes are ignored" {
-  skip "Currently, this command corresponds to a code block with tilde symbols."
   local markdown_file tags_file expect_file
   markdown_file=$(get_markdown_file)
   tags_file=$(get_tags_file)
