@@ -115,6 +115,20 @@ impl Line {
     }
 }
 
+#[test]
+fn test_line_split_parses_simple_heading() {
+    let item = Line::split("# h1");
+    assert_eq!(item.level, 1);
+    assert_eq!(item.title, "h1");
+}
+
+#[test]
+fn test_line_split_parses_heading_contains_spaces() {
+    let item = Line::split("# h 1");
+    assert_eq!(item.level, 1);
+    assert_eq!(item.title, "h 1");
+}
+
 #[allow(dead_code)]
 fn is_head(line: &str) -> bool {
     if line.starts_with("# ") {
@@ -125,6 +139,7 @@ fn is_head(line: &str) -> bool {
         false
     }
 }
+
 #[cfg(not(windows))]
 fn canonicalize(path: &String) -> String {
     fs::canonicalize(path).unwrap().to_str().unwrap().to_string()
