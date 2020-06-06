@@ -1,4 +1,11 @@
 use std::fs;
+
+enum CodeBlockKind {
+    NotInCodeBlock,
+    Backticks,
+    Tildes,
+}
+
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() < 2 {
@@ -16,14 +23,31 @@ fn main() {
 
     let contents = fs::read_to_string(path).expect("");
     let mut stack: Vec<Line> = Vec::new();
-    let mut in_code = false;
+    let mut in_code = CodeBlockKind::NotInCodeBlock;
     let mut line_no = 0;
     for line in contents.lines() {
         line_no = line_no + 1;
         if line.starts_with("```") {
-            in_code = !in_code;
+            in_code = match in_code {
+                CodeBlockKind::NotInCodeBlock => CodeBlockKind::Backticks,
+                CodeBlockKind::Backticks => CodeBlockKind::NotInCodeBlock,
+                _ => panic!(),
+            }
         }
-        if !in_code && line.starts_with("#") && line.contains(" ") {
+        if line.starts_with("~~~") {
+            in_code = match in_code {
+                CodeBlockKind::NotInCodeBlock => CodeBlockKind::Tildes,
+                CodeBlockKind::Tildes => CodeBlockKind::NotInCodeBlock,
+                _ => panic!(),
+            }
+        }
+        if match in_code {
+            CodeBlockKind::NotInCodeBlock => false,
+            _ => true,
+        } {
+            continue
+        }
+        if line.starts_with("#") && line.contains(" ") {
             let item: Line = Line::split(line);
             let title = item.title.clone();
             let level = item.level;
