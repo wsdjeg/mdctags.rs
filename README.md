@@ -62,3 +62,11 @@ cross build --release --target x86_64-pc-windows-gnu
 ### Thanks
 
 - [tagbar-markdown](https://github.com/lvht/tagbar-markdown)
+
+### License
+
+MIT
+
+### Author
+
+Wang Shidong
