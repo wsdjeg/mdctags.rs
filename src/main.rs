@@ -61,13 +61,7 @@ fn main() {
                 .rev()
                 .collect::<Vec<String>>()
                 .join("::");
-            let mut plevel;
-            if stack.len() == 0 {
-                plevel = 0;
-            } else {
-                let parent = &stack[0];
-                plevel = parent.level;
-            }
+            let plevel = if stack.len() > 0 { stack[0].level } else { 0 };
             let mut scope: String = String::new();
             if !scopes_str.is_empty() {
                 scope = format!("h{}:{}", plevel, scopes_str);
