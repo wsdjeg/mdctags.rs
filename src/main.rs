@@ -38,7 +38,11 @@ fn test_heading_item_split_parses_heading_contains_spaces() {
 
 #[cfg(not(windows))]
 fn canonicalize(path: &String) -> String {
-    fs::canonicalize(path).unwrap().to_str().unwrap().to_string()
+    fs::canonicalize(path)
+        .unwrap()
+        .to_str()
+        .unwrap()
+        .to_string()
 }
 
 #[cfg(windows)]
@@ -81,7 +85,11 @@ fn process_heading(line: &str, path: &String, stack: &mut Vec<HeadingItem>, line
         .rev()
         .collect::<Vec<String>>()
         .join("::");
-    let scope = if stack.len() > 0 { format!("h{}:{}", plevel, scopes_str) } else { String::new() };
+    let scope = if stack.len() > 0 {
+        format!("h{}:{}", plevel, scopes_str)
+    } else {
+        String::new()
+    };
 
     let item_type = 0x60 + item.level;
 
@@ -121,8 +129,11 @@ fn main() {
         line_no = line_no + 1;
 
         update_in_code(line, &mut in_code);
-        if match in_code { CodeBlockKind::NotInCodeBlock => false, _ => true } {
-            continue
+        if match in_code {
+            CodeBlockKind::NotInCodeBlock => false,
+            _ => true,
+        } {
+            continue;
         }
 
         if line.starts_with("#") && line.contains(" ") {
