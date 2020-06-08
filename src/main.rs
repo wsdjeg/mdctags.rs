@@ -61,10 +61,7 @@ fn main() {
                 .collect::<Vec<String>>()
                 .join("::");
             let plevel = if stack.len() > 0 { stack[0].level } else { 0 };
-            let mut scope: String = String::new();
-            if stack.len() > 0 {
-                scope = format!("h{}:{}", plevel, scopes_str);
-            }
+            let scope = if stack.len() > 0 { format!("h{}:{}", plevel, scopes_str) } else { String::new() };
             println!(
                 "{}\t{}\t/^{}$/;\"\t{}\tline:{}\t{}",
                 title,
