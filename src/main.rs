@@ -50,18 +50,21 @@ fn main() {
         if line.starts_with("#") && line.contains(" ") {
             let item: Line = Line::split(line);
             let title = item.title.clone();
-            let item_type = 0x60 + item.level;
             while stack.len() > 0 && stack[0].level >= item.level {
                 stack.remove(0);
             }
+
+            let plevel = if stack.len() > 0 { stack[0].level } else { 0 };
             let scopes_str = stack
                 .iter()
                 .map(|x| x.title.clone())
                 .rev()
                 .collect::<Vec<String>>()
                 .join("::");
-            let plevel = if stack.len() > 0 { stack[0].level } else { 0 };
             let scope = if stack.len() > 0 { format!("h{}:{}", plevel, scopes_str) } else { String::new() };
+
+            let item_type = 0x60 + item.level;
+
             println!(
                 "{}\t{}\t/^{}$/;\"\t{}\tline:{}\t{}",
                 title,
