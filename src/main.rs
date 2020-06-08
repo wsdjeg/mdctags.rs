@@ -69,7 +69,7 @@ fn main() {
                 line,
                 item_type as char,
                 line_no,
-                scope.as_str()
+                scope
             );
 
             stack.insert(0, item);
