@@ -6,6 +6,50 @@ enum CodeBlockKind {
     Tildes,
 }
 
+#[derive(Clone)]
+struct HeadingItem {
+    title: String,
+    level: u8,
+}
+
+impl HeadingItem {
+    fn split(line: &str) -> HeadingItem {
+        let v: Vec<&str> = line.splitn(2, ' ').collect();
+        HeadingItem {
+            title: v[1].to_string(),
+            level: v[0].len() as u8,
+        }
+    }
+}
+
+#[test]
+fn test_heading_item_split_parses_simple_heading() {
+    let item = HeadingItem::split("# h1");
+    assert_eq!(item.level, 1);
+    assert_eq!(item.title, "h1");
+}
+
+#[test]
+fn test_heading_item_split_parses_heading_contains_spaces() {
+    let item = HeadingItem::split("# h 1");
+    assert_eq!(item.level, 1);
+    assert_eq!(item.title, "h 1");
+}
+
+#[cfg(not(windows))]
+fn canonicalize(path: &String) -> String {
+    fs::canonicalize(path).unwrap().to_str().unwrap().to_string()
+}
+
+#[cfg(windows)]
+fn canonicalize(path: &String) -> String {
+    // Real fs::canonicalize on Windows produces UNC paths which cl.exe is
+    // unable to handle in includes. Use a poor approximation instead.
+    // https://github.com/rust-lang/rust/issues/42869
+    // https://github.com/alexcrichton/cc-rs/issues/169
+    fs::canonicalize(path).unwrap().to_str().unwrap()[4..].to_string()
+}
+
 fn update_in_code(line: &str, in_code: &mut CodeBlockKind) {
     if line.starts_with("```") {
         *in_code = match in_code {
@@ -85,48 +129,4 @@ fn main() {
             process_heading(line, path, &mut stack, line_no);
         }
     }
-}
-
-#[derive(Clone)]
-struct HeadingItem {
-    title: String,
-    level: u8,
-}
-
-impl HeadingItem {
-    fn split(line: &str) -> HeadingItem {
-        let v: Vec<&str> = line.splitn(2, ' ').collect();
-        HeadingItem {
-            title: v[1].to_string(),
-            level: v[0].len() as u8,
-        }
-    }
-}
-
-#[test]
-fn test_heading_item_split_parses_simple_heading() {
-    let item = HeadingItem::split("# h1");
-    assert_eq!(item.level, 1);
-    assert_eq!(item.title, "h1");
-}
-
-#[test]
-fn test_heading_item_split_parses_heading_contains_spaces() {
-    let item = HeadingItem::split("# h 1");
-    assert_eq!(item.level, 1);
-    assert_eq!(item.title, "h 1");
-}
-
-#[cfg(not(windows))]
-fn canonicalize(path: &String) -> String {
-    fs::canonicalize(path).unwrap().to_str().unwrap().to_string()
-}
-
-#[cfg(windows)]
-fn canonicalize(path: &String) -> String {
-    // Real fs::canonicalize on Windows produces UNC paths which cl.exe is
-    // unable to handle in includes. Use a poor approximation instead.
-    // https://github.com/rust-lang/rust/issues/42869
-    // https://github.com/alexcrichton/cc-rs/issues/169
-    fs::canonicalize(path).unwrap().to_str().unwrap()[4..].to_string()
 }
