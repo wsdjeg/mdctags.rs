@@ -53,8 +53,7 @@ fn main() {
             let level = item.level;
             let item_type = 0x60 + item.level;
             if stack.len() > 0 {
-                if stack[0].level < item.level {
-                } else {
+                if stack[0].level >= item.level {
                     while stack.len() > 0 && stack[0].level >= item.level {
                         stack.remove(0);
                     }
