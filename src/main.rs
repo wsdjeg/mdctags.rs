@@ -62,7 +62,7 @@ fn main() {
                 .collect::<Vec<String>>()
                 .join("::");
             let mut plevel;
-            if stack.len() < 1 {
+            if stack.len() == 0 {
                 if level > 1 {
                     plevel = level - 1;
                 } else {
