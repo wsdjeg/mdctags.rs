@@ -59,13 +59,12 @@ fn main() {
                     stack.remove(0);
                 }
             }
-            stack.insert(0, item);
             #[allow(unused_mut)]
             let mut scopes: Vec<String> = Vec::new();
             for each in stack.clone() {
                 scopes.insert(0, each.title.clone());
             }
-            scopes.pop();
+            stack.insert(0, item);
             let scopes_str = scopes.join("::");
             #[allow(unused_assignments)]
             let mut plevel = 0;
