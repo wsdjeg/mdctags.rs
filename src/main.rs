@@ -52,11 +52,12 @@ fn main() {
             let title = item.title.clone();
             let level = item.level;
             let item_type = 0x60 + item.level;
-            if stack.len() == 0 {
-            } else if stack[0].level < item.level {
-            } else {
-                while stack.len() > 0 && stack[0].level >= item.level {
-                    stack.remove(0);
+            if stack.len() > 0 {
+                if stack[0].level < item.level {
+                } else {
+                    while stack.len() > 0 && stack[0].level >= item.level {
+                        stack.remove(0);
+                    }
                 }
             }
             #[allow(unused_mut)]
