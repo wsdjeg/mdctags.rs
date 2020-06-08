@@ -50,7 +50,6 @@ fn main() {
         if line.starts_with("#") && line.contains(" ") {
             let item: Line = Line::split(line);
             let title = item.title.clone();
-            let level = item.level;
             let item_type = 0x60 + item.level;
             while stack.len() > 0 && stack[0].level >= item.level {
                 stack.remove(0);
