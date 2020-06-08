@@ -63,7 +63,7 @@ fn main() {
                 .join("::");
             let plevel = if stack.len() > 0 { stack[0].level } else { 0 };
             let mut scope: String = String::new();
-            if !scopes_str.is_empty() {
+            if stack.len() > 0 {
                 scope = format!("h{}:{}", plevel, scopes_str);
             }
             println!(
