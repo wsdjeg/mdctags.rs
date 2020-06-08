@@ -117,17 +117,6 @@ fn test_heading_item_split_parses_heading_contains_spaces() {
     assert_eq!(item.title, "h 1");
 }
 
-#[allow(dead_code)]
-fn is_head(line: &str) -> bool {
-    if line.starts_with("# ") {
-        true
-    } else if line.starts_with("## ") {
-        true
-    } else {
-        false
-    }
-}
-
 #[cfg(not(windows))]
 fn canonicalize(path: &String) -> String {
     fs::canonicalize(path).unwrap().to_str().unwrap().to_string()
