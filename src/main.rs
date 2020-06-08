@@ -22,7 +22,7 @@ fn main() {
     let path = &args[1];
 
     let contents = fs::read_to_string(path).expect("");
-    let mut stack: Vec<Line> = Vec::new();
+    let mut stack: Vec<HeadingItem> = Vec::new();
     let mut in_code = CodeBlockKind::NotInCodeBlock;
     let mut line_no = 0;
     for line in contents.lines() {
@@ -48,7 +48,7 @@ fn main() {
             continue
         }
         if line.starts_with("#") && line.contains(" ") {
-            let item: Line = Line::split(line);
+            let item: HeadingItem = HeadingItem::split(line);
 
             while stack.len() > 0 && stack[0].level >= item.level {
                 stack.remove(0);
@@ -81,15 +81,15 @@ fn main() {
 }
 
 #[derive(Clone)]
-struct Line {
+struct HeadingItem {
     title: String,
     level: u8,
 }
 
-impl Line {
-    fn split(line: &str) -> Line {
+impl HeadingItem {
+    fn split(line: &str) -> HeadingItem {
         let v: Vec<&str> = line.splitn(2, ' ').collect();
-        Line {
+        HeadingItem {
             title: v[1].to_string(),
             level: v[0].len() as u8,
         }
@@ -97,15 +97,15 @@ impl Line {
 }
 
 #[test]
-fn test_line_split_parses_simple_heading() {
-    let item = Line::split("# h1");
+fn test_heading_item_split_parses_simple_heading() {
+    let item = HeadingItem::split("# h1");
     assert_eq!(item.level, 1);
     assert_eq!(item.title, "h1");
 }
 
 #[test]
-fn test_line_split_parses_heading_contains_spaces() {
-    let item = Line::split("# h 1");
+fn test_heading_item_split_parses_heading_contains_spaces() {
+    let item = HeadingItem::split("# h 1");
     assert_eq!(item.level, 1);
     assert_eq!(item.title, "h 1");
 }
