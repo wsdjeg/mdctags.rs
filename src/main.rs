@@ -56,13 +56,12 @@ fn main() {
                 stack.remove(0);
             }
             let scopes_str = stack
-                .clone()
-                .into_iter()
+                .iter()
                 .map(|x| x.title.clone())
                 .rev()
                 .collect::<Vec<String>>()
                 .join("::");
-            let mut plevel = 0;
+            let mut plevel;
             if stack.len() < 1 {
                 if level > 1 {
                     plevel = level - 1;
