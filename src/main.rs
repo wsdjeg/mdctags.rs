@@ -6,6 +6,23 @@ enum CodeBlockKind {
     Tildes,
 }
 
+fn update_in_code(line: &str, in_code: &mut CodeBlockKind) {
+    if line.starts_with("```") {
+        *in_code = match in_code {
+            CodeBlockKind::NotInCodeBlock => CodeBlockKind::Backticks,
+            CodeBlockKind::Backticks => CodeBlockKind::NotInCodeBlock,
+            _ => panic!(),
+        }
+    }
+    if line.starts_with("~~~") {
+        *in_code = match in_code {
+            CodeBlockKind::NotInCodeBlock => CodeBlockKind::Tildes,
+            CodeBlockKind::Tildes => CodeBlockKind::NotInCodeBlock,
+            _ => panic!(),
+        }
+    }
+}
+
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() < 2 {
@@ -27,26 +44,12 @@ fn main() {
     let mut line_no = 0;
     for line in contents.lines() {
         line_no = line_no + 1;
-        if line.starts_with("```") {
-            in_code = match in_code {
-                CodeBlockKind::NotInCodeBlock => CodeBlockKind::Backticks,
-                CodeBlockKind::Backticks => CodeBlockKind::NotInCodeBlock,
-                _ => panic!(),
-            }
-        }
-        if line.starts_with("~~~") {
-            in_code = match in_code {
-                CodeBlockKind::NotInCodeBlock => CodeBlockKind::Tildes,
-                CodeBlockKind::Tildes => CodeBlockKind::NotInCodeBlock,
-                _ => panic!(),
-            }
-        }
-        if match in_code {
-            CodeBlockKind::NotInCodeBlock => false,
-            _ => true,
-        } {
+
+        update_in_code(line, &mut in_code);
+        if match in_code { CodeBlockKind::NotInCodeBlock => false, _ => true } {
             continue
         }
+
         if line.starts_with("#") && line.contains(" ") {
             let item: HeadingItem = HeadingItem::split(line);
 
