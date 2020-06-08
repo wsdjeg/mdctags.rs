@@ -60,18 +60,17 @@ fn main() {
             for each in stack.clone() {
                 scopes.insert(0, each.title.clone());
             }
-            stack.insert(0, item);
             let scopes_str = scopes.join("::");
             #[allow(unused_assignments)]
             let mut plevel = 0;
-            if stack.len() < 2 {
+            if stack.len() < 1 {
                 if level > 1 {
                     plevel = level - 1;
                 } else {
                     plevel = 0;
                 }
             } else {
-                let parent = &stack[1];
+                let parent = &stack[0];
                 plevel = parent.level;
             }
             let mut scope: String = String::new();
@@ -87,6 +86,8 @@ fn main() {
                 line_no,
                 scope.as_str()
             );
+
+            stack.insert(0, item);
         }
     }
 }
