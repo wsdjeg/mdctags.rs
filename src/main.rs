@@ -63,11 +63,7 @@ fn main() {
                 .join("::");
             let mut plevel;
             if stack.len() == 0 {
-                if level > 1 {
-                    plevel = level - 1;
-                } else {
-                    plevel = 0;
-                }
+                plevel = 0;
             } else {
                 let parent = &stack[0];
                 plevel = parent.level;
