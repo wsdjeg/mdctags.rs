@@ -23,6 +23,37 @@ fn update_in_code(line: &str, in_code: &mut CodeBlockKind) {
     }
 }
 
+fn process_heading(line: &str, path: &String, stack: &mut Vec<HeadingItem>, line_no: u8) {
+    let item: HeadingItem = HeadingItem::split(line);
+
+    while stack.len() > 0 && stack[0].level >= item.level {
+        stack.remove(0);
+    }
+
+    let plevel = if stack.len() > 0 { stack[0].level } else { 0 };
+    let scopes_str = stack
+        .iter()
+        .map(|x| x.title.clone())
+        .rev()
+        .collect::<Vec<String>>()
+        .join("::");
+    let scope = if stack.len() > 0 { format!("h{}:{}", plevel, scopes_str) } else { String::new() };
+
+    let item_type = 0x60 + item.level;
+
+    println!(
+        "{}\t{}\t/^{}$/;\"\t{}\tline:{}\t{}",
+        item.title.clone(),
+        canonicalize(path),
+        line,
+        item_type as char,
+        line_no,
+        scope
+    );
+
+    stack.insert(0, item);
+}
+
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() < 2 {
@@ -51,34 +82,7 @@ fn main() {
         }
 
         if line.starts_with("#") && line.contains(" ") {
-            let item: HeadingItem = HeadingItem::split(line);
-
-            while stack.len() > 0 && stack[0].level >= item.level {
-                stack.remove(0);
-            }
-
-            let plevel = if stack.len() > 0 { stack[0].level } else { 0 };
-            let scopes_str = stack
-                .iter()
-                .map(|x| x.title.clone())
-                .rev()
-                .collect::<Vec<String>>()
-                .join("::");
-            let scope = if stack.len() > 0 { format!("h{}:{}", plevel, scopes_str) } else { String::new() };
-
-            let item_type = 0x60 + item.level;
-
-            println!(
-                "{}\t{}\t/^{}$/;\"\t{}\tline:{}\t{}",
-                item.title.clone(),
-                canonicalize(path),
-                line,
-                item_type as char,
-                line_no,
-                scope
-            );
-
-            stack.insert(0, item);
+            process_heading(line, path, &mut stack, line_no);
         }
     }
 }
