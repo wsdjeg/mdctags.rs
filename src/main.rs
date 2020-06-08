@@ -49,7 +49,7 @@ fn main() {
         }
         if line.starts_with("#") && line.contains(" ") {
             let item: Line = Line::split(line);
-            let title = item.title.clone();
+
             while stack.len() > 0 && stack[0].level >= item.level {
                 stack.remove(0);
             }
@@ -67,7 +67,7 @@ fn main() {
 
             println!(
                 "{}\t{}\t/^{}$/;\"\t{}\tline:{}\t{}",
-                title,
+                item.title.clone(),
                 canonicalize(path),
                 line,
                 item_type as char,
