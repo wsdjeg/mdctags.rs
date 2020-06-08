@@ -53,15 +53,13 @@ fn main() {
             let level = item.level;
             let item_type = 0x60 + item.level;
             if stack.len() == 0 {
-                stack.insert(0, item);
             } else if stack[0].level < item.level {
-                stack.insert(0, item);
             } else {
                 while stack.len() > 0 && stack[0].level >= item.level {
                     stack.remove(0);
                 }
-                stack.insert(0, item);
             }
+            stack.insert(0, item);
             #[allow(unused_mut)]
             let mut scopes: Vec<String> = Vec::new();
             for each in stack.clone() {
