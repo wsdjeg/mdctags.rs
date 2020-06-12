@@ -26,25 +26,6 @@ impl HeadingItem {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_heading_item_split_parses_simple_heading() {
-        let item = HeadingItem::split("# h1");
-        assert_eq!(item.level, 1);
-        assert_eq!(item.title, "h1");
-    }
-
-    #[test]
-    fn test_heading_item_split_parses_heading_contains_spaces() {
-        let item = HeadingItem::split("# h 1");
-        assert_eq!(item.level, 1);
-        assert_eq!(item.title, "h 1");
-    }
-}
-
 #[cfg(not(windows))]
 fn canonicalize(path: &String) -> String {
     fs::canonicalize(path)
@@ -180,5 +161,24 @@ fn main() {
         if is_heading(line) {
             process_heading(line, path, &mut stack, line_no);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_heading_item_split_parses_simple_heading() {
+        let item = HeadingItem::split("# h1");
+        assert_eq!(item.level, 1);
+        assert_eq!(item.title, "h1");
+    }
+
+    #[test]
+    fn test_heading_item_split_parses_heading_contains_spaces() {
+        let item = HeadingItem::split("# h 1");
+        assert_eq!(item.level, 1);
+        assert_eq!(item.title, "h 1");
     }
 }
