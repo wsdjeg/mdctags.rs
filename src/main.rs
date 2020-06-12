@@ -1,4 +1,8 @@
 use std::fs;
+use regex::Regex;
+
+#[macro_use]
+extern crate lazy_static;
 
 enum CodeBlockKind {
     NotInCodeBlock,
@@ -72,7 +76,10 @@ fn update_in_code(line: &str, in_code: &mut CodeBlockKind) {
 }
 
 fn is_heading(line: &str) -> bool {
-    line.starts_with("#") && line.contains(" ")
+    lazy_static! {
+        static ref RE: Regex = Regex::new("^#+ .*").unwrap();
+    }
+    RE.is_match(line)
 }
 
 #[test]
