@@ -68,7 +68,7 @@ fn is_heading(line: &str) -> bool {
     RE.is_match(line)
 }
 
-fn process_heading(line: &str, path: &String, stack: &mut Vec<HeadingItem>, line_no: u8) {
+fn process_heading(line: &str, path: &String, stack: &mut Vec<HeadingItem>, line_no: u32) {
     let item: HeadingItem = HeadingItem::split(line);
 
     while stack.len() > 0 && stack[0].level >= item.level {

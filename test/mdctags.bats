@@ -231,3 +231,29 @@ __EXPECT__
 
   diff -u "$tags_file" "$expect_file"
 }
+
+@test "The n-th line heading is output as the n-th line" {
+  local markdown_file tags_file expect_file
+  markdown_file=$(get_markdown_file)
+  tags_file=$(get_tags_file)
+  expect_file=$(get_expect_file)
+
+  cat <<'__MARKDOWN__' >"$markdown_file"
+# hd1a
+__MARKDOWN__
+  for i in $(seq 2 255); do
+    echo "" >>"$markdown_file"
+  done
+  cat <<'__MARKDOWN__' >>"$markdown_file"
+# hd1b
+__MARKDOWN__
+
+  run_ok "$markdown_file" "$tags_file"
+
+  cat <<'__EXPECT__' >"$expect_file"
+hd1a<tab>/a.md<tab>/^# hd1a$/;"<tab>a<tab>line:1<tab>
+hd1b<tab>/a.md<tab>/^# hd1b$/;"<tab>a<tab>line:256<tab>
+__EXPECT__
+
+  diff -u "$tags_file" "$expect_file"
+}
