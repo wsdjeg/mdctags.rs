@@ -68,31 +68,6 @@ fn is_heading(line: &str) -> bool {
     RE.is_match(line)
 }
 
-#[test]
-fn test_is_heading_p() {
-    assert_eq!(is_heading("text"), false);
-}
-
-#[test]
-fn test_is_heading_h1() {
-    assert_eq!(is_heading("# h1"), true);
-}
-
-#[test]
-fn test_is_heading_h2() {
-    assert_eq!(is_heading("## h2"), true);
-}
-
-#[test]
-fn test_is_heading_hashtag() {
-    assert_eq!(is_heading("#tag"), false);
-}
-
-#[test]
-fn test_is_heading_hashtag_with_space() {
-    assert_eq!(is_heading("#tag with space"), false);
-}
-
 fn process_heading(line: &str, path: &String, stack: &mut Vec<HeadingItem>, line_no: u8) {
     let item: HeadingItem = HeadingItem::split(line);
 
@@ -180,5 +155,30 @@ mod tests {
         let item = HeadingItem::split("# h 1");
         assert_eq!(item.level, 1);
         assert_eq!(item.title, "h 1");
+    }
+
+    #[test]
+    fn test_is_heading_p() {
+        assert_eq!(is_heading("text"), false);
+    }
+
+    #[test]
+    fn test_is_heading_h1() {
+        assert_eq!(is_heading("# h1"), true);
+    }
+
+    #[test]
+    fn test_is_heading_h2() {
+        assert_eq!(is_heading("## h2"), true);
+    }
+
+    #[test]
+    fn test_is_heading_hashtag() {
+        assert_eq!(is_heading("#tag"), false);
+    }
+
+    #[test]
+    fn test_is_heading_hashtag_with_space() {
+        assert_eq!(is_heading("#tag with space"), false);
     }
 }
