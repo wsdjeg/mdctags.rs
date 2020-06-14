@@ -114,7 +114,6 @@ __EXPECT__
 }
 
 @test "Code blocks with tildes are ignored" {
-  skip "Currently, this command corresponds to a code block with tilde symbols."
   local markdown_file tags_file expect_file
   markdown_file=$(get_markdown_file)
   tags_file=$(get_tags_file)
@@ -228,6 +227,32 @@ __MARKDOWN__
 hd1<tab>/a.md<tab>/^# hd1$/;"<tab>a<tab>line:1<tab>
 hd2a<tab>/a.md<tab>/^## hd2a$/;"<tab>b<tab>line:2<tab>h1:hd1
 hd2b<tab>/a.md<tab>/^## hd2b$/;"<tab>b<tab>line:3<tab>h1:hd1
+__EXPECT__
+
+  diff -u "$tags_file" "$expect_file"
+}
+
+@test "The n-th line heading is output as the n-th line" {
+  local markdown_file tags_file expect_file
+  markdown_file=$(get_markdown_file)
+  tags_file=$(get_tags_file)
+  expect_file=$(get_expect_file)
+
+  cat <<'__MARKDOWN__' >"$markdown_file"
+# hd1a
+__MARKDOWN__
+  for i in $(seq 2 255); do
+    echo "" >>"$markdown_file"
+  done
+  cat <<'__MARKDOWN__' >>"$markdown_file"
+# hd1b
+__MARKDOWN__
+
+  run_ok "$markdown_file" "$tags_file"
+
+  cat <<'__EXPECT__' >"$expect_file"
+hd1a<tab>/a.md<tab>/^# hd1a$/;"<tab>a<tab>line:1<tab>
+hd1b<tab>/a.md<tab>/^# hd1b$/;"<tab>a<tab>line:256<tab>
 __EXPECT__
 
   diff -u "$tags_file" "$expect_file"
