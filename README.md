@@ -1,3 +1,5 @@
+![Rust](https://github.com/kumarstack55/mdctags.rs/workflows/Rust/badge.svg)
+
 ## mdctags
 
 > tags for markdown file
