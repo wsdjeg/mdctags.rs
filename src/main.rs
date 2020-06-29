@@ -45,14 +45,18 @@ fn canonicalize(path: &String) -> String {
 }
 
 fn update_in_code(line: &str, in_code: &mut CodeBlockKind) {
-    if line.starts_with("```") {
+    lazy_static! {
+        static ref RE_BACKTICKS: Regex = Regex::new("^ *```").unwrap();
+        static ref RE_TILDES: Regex = Regex::new("^ *~~~").unwrap();
+    }
+    if RE_BACKTICKS.is_match(line) {
         *in_code = match in_code {
             CodeBlockKind::NotInCodeBlock => CodeBlockKind::Backticks,
             CodeBlockKind::Backticks => CodeBlockKind::NotInCodeBlock,
             _ => panic!(),
         }
     }
-    if line.starts_with("~~~") {
+    if RE_TILDES.is_match(line) {
         *in_code = match in_code {
             CodeBlockKind::NotInCodeBlock => CodeBlockKind::Tildes,
             CodeBlockKind::Tildes => CodeBlockKind::NotInCodeBlock,
