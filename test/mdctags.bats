@@ -113,6 +113,33 @@ __EXPECT__
   diff -u "$tags_file" "$expect_file"
 }
 
+@test "Fences with backticks can be indented" {
+  local markdown_file tags_file expect_file
+  markdown_file=$(get_markdown_file)
+  tags_file=$(get_tags_file)
+  expect_file=$(get_expect_file)
+
+  cat <<'__MARKDOWN__' >"$markdown_file"
+# hd1a
+  ```
+aaa
+  aaa
+aaa
+# in code block
+  ```
+# hd1b
+__MARKDOWN__
+
+  run_ok "$markdown_file" "$tags_file"
+
+  cat <<'__EXPECT__' >"$expect_file"
+hd1a<tab>/a.md<tab>/^# hd1a$/;"<tab>a<tab>line:1<tab>
+hd1b<tab>/a.md<tab>/^# hd1b$/;"<tab>a<tab>line:8<tab>
+__EXPECT__
+
+  diff -u "$tags_file" "$expect_file"
+}
+
 @test "Code blocks with tildes are ignored" {
   local markdown_file tags_file expect_file
   markdown_file=$(get_markdown_file)
@@ -132,6 +159,33 @@ __MARKDOWN__
   cat <<'__EXPECT__' >"$expect_file"
 hd1a<tab>/a.md<tab>/^# hd1a$/;"<tab>a<tab>line:1<tab>
 hd1b<tab>/a.md<tab>/^# hd1b$/;"<tab>a<tab>line:5<tab>
+__EXPECT__
+
+  diff -u "$tags_file" "$expect_file"
+}
+
+@test "Fences with tildes can be indented" {
+  local markdown_file tags_file expect_file
+  markdown_file=$(get_markdown_file)
+  tags_file=$(get_tags_file)
+  expect_file=$(get_expect_file)
+
+  cat <<'__MARKDOWN__' >"$markdown_file"
+# hd1a
+  ~~~
+aaa
+  aaa
+aaa
+# in code block
+  ~~~
+# hd1b
+__MARKDOWN__
+
+  run_ok "$markdown_file" "$tags_file"
+
+  cat <<'__EXPECT__' >"$expect_file"
+hd1a<tab>/a.md<tab>/^# hd1a$/;"<tab>a<tab>line:1<tab>
+hd1b<tab>/a.md<tab>/^# hd1b$/;"<tab>a<tab>line:8<tab>
 __EXPECT__
 
   diff -u "$tags_file" "$expect_file"
