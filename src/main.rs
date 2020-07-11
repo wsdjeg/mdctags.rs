@@ -1,5 +1,5 @@
-use std::fs;
 use regex::Regex;
+use std::fs;
 
 #[macro_use]
 extern crate lazy_static;
