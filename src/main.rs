@@ -27,7 +27,7 @@ impl HeadingItem {
 }
 
 #[cfg(not(windows))]
-fn canonicalize(path: &String) -> String {
+fn canonicalize(path: &str) -> String {
     fs::canonicalize(path)
         .unwrap()
         .to_str()
@@ -72,21 +72,21 @@ fn is_heading(line: &str) -> bool {
     RE.is_match(line)
 }
 
-fn process_heading(line: &str, path: &String, stack: &mut Vec<HeadingItem>, line_no: u32) {
+fn process_heading(line: &str, path: &str, stack: &mut Vec<HeadingItem>, line_no: u32) {
     let item: HeadingItem = HeadingItem::split(line);
 
-    while stack.len() > 0 && stack[0].level >= item.level {
+    while !stack.is_empty() && stack[0].level >= item.level {
         stack.remove(0);
     }
 
-    let plevel = if stack.len() > 0 { stack[0].level } else { 0 };
+    let plevel = if !stack.is_empty() { stack[0].level } else { 0 };
     let scopes_str = stack
         .iter()
         .map(|x| x.title.clone())
         .rev()
         .collect::<Vec<String>>()
         .join("::");
-    let scope = if stack.len() > 0 {
+    let scope = if !stack.is_empty() {
         format!("h{}:{}", plevel, scopes_str)
     } else {
         String::new()
@@ -96,7 +96,7 @@ fn process_heading(line: &str, path: &String, stack: &mut Vec<HeadingItem>, line
 
     println!(
         "{}\t{}\t/^{}$/;\"\t{}\tline:{}\t{}",
-        item.title.clone(),
+        item.title,
         canonicalize(path),
         line,
         item_type as char,
@@ -125,20 +125,14 @@ fn main() {
     let contents = fs::read_to_string(path).expect("");
     let mut stack: Vec<HeadingItem> = Vec::new();
     let mut in_code = CodeBlockKind::NotInCodeBlock;
-    let mut line_no = 0;
-    for line in contents.lines() {
-        line_no = line_no + 1;
-
+    for (line_no, line) in contents.lines().enumerate() {
         update_in_code(line, &mut in_code);
-        if match in_code {
-            CodeBlockKind::NotInCodeBlock => false,
-            _ => true,
-        } {
+        if !matches!(in_code, CodeBlockKind::NotInCodeBlock) {
             continue;
         }
 
         if is_heading(line) {
-            process_heading(line, path, &mut stack, line_no);
+            process_heading(line, path, &mut stack, line_no as u32);
         }
     }
 }
